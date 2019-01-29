@@ -2,28 +2,28 @@ kind: pipeline
 name: default
 
 stages:
-    - test
-    - deploy
-    image: node:7.2.0
-    before_script:
-    - npm install --global force-dev-tool --silent &>/dev/null
-    - force-dev-tool remote add production jarektusinski@gmail.com 29Takken29!cxzPnEAQZm5Ym0xR7cNP1xPSMgKb https://login.salesforce.com --default
-    - git diff HEAD~1 HEAD --no-renames | force-dev-tool changeset create feature-merge -f
-    cache:
-      paths:
-      - /usr/local/lib/node_modules
-      untracked: true
+- test
+- deploy
+image: node:7.2.0
+before_script:
+- npm install --global force-dev-tool --silent &>/dev/null
+- force-dev-tool remote add production $PRODUCTION_LOGIN $PRODUCTION_PASS $SALESFORCE_LOGIN_PAGE --default
+- git diff HEAD~1 HEAD --no-renames | force-dev-tool changeset create feature-merge -f
+cache:
+  paths:
+  - /usr/local/lib/node_modules
+  untracked: true
 
-    test_deploy_production:
-      stage: test
-      allow_failure: true
-      script:
-      - force-dev-tool deploy -ct production
+test_deploy_production:
+  stage: test
+  allow_failure: true
+  script:
+  - force-dev-tool deploy -ct production
 
-    deploy_production:
-      stage: deploy
-      environment: production
-      when: manual
-      script:
-      # The -t makes sure we run tests
-      - force-dev-tool deploy -t production
+deploy_production:
+  stage: deploy
+  environment: production
+  when: manual
+  script:
+  # The -t makes sure we run tests
+  - force-dev-tool deploy -t production
