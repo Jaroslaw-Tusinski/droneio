@@ -4,7 +4,7 @@ stages:
     image: node:7.2.0
     before_script:
     - npm install --global force-dev-tool --silent &>/dev/null
-    - force-dev-tool remote add production $PRODUCTION_LOGIN $PRODUCTION_PASS $SALESFORCE_LOGIN_PAGE --default
+    - force-dev-tool remote add production jarektusinski@gmail.com 29Takken29!cxzPnEAQZm5Ym0xR7cNP1xPSMgKb https://login.salesforce.com --default
     - git diff HEAD~1 HEAD --no-renames | force-dev-tool changeset create feature-merge -f
     cache:
       paths:
